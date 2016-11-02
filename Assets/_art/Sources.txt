@@ -1,0 +1,16 @@
+I didn't make these art assets. They were found at: 
+
+Clouds
+http://gallery.yopriceville.com/Free-Clipart-Pictures/Cloud-PNG/Cloud_PNG_Transparent_Large_Clip_Art_Image#.WBkL38kzs4U
+
+Moon
+http://orig13.deviantart.net/957e/f/2011/363/9/9/moon_png_by_natyjonasproductions-d4kod97.png
+
+Concrete
+http://www.sycha.com/wp-content/uploads/2010/12/concrete-693.jpg
+
+Road
+http://vaevictisgame.com/wp-content/uploads/2014/11/Road3.jpg
+
+HUDFPS script: 
+http://wiki.unity3d.com/index.php?title=FramesPerSecond
