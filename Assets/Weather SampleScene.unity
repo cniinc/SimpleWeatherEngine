@@ -1771,8 +1771,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: afe8860fbada86b4cb195a45e1f8f940, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameTimeOfDay: 0
+  gameTimeOfDay: 12
   totalDayLength: 20
+  transitionHours: 2
   sunriseSunColor: {r: 1, g: 0.80689657, b: 0, a: 1}
   daySunColor: {r: 1, g: 0.95686275, b: 0.8392157, a: 1}
   sunsetSunColor: {r: 1, g: 0.5661901, b: 0, a: 1}
@@ -1845,7 +1846,7 @@ Light:
   m_CookieSize: 10
   m_Shadows:
     m_Type: 2
-    m_Resolution: 3
+    m_Resolution: 1
     m_CustomResolution: -1
     m_Strength: 1
     m_Bias: 0.05
@@ -2238,7 +2239,7 @@ Canvas:
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_TargetDisplay: 0
 --- !u!224 &1619554949
 RectTransform:
@@ -2597,7 +2598,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:

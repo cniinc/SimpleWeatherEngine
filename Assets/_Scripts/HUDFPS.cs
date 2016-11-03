@@ -51,13 +51,14 @@ public class HUDFPS : MonoBehaviour
 			string format = System.String.Format("{0:F2} FPS",fps);
 			guiText.text = format;
 
-			if(fps < 30)
+			if (fps < 30)
 				guiText.material.color = Color.yellow;
+			else if (fps < 10)
+				guiText.material.color = Color.red;
 			else 
-				if(fps < 10)
-					guiText.material.color = Color.red;
-				else
-					guiText.material.color = Color.white;
+				guiText.material.color = Color.white;
+
+			
 			//	DebugConsole.Log(format,level);
 			timeleft = updateInterval;
 			accum = 0.0F;
