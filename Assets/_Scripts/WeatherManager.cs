@@ -20,7 +20,7 @@ public class WeatherManager : MonoBehaviour {
 	[SerializeField] private Light Sun;
 	private float initialSunIntensity;
 	[SerializeField] private GameObject NightSky;
-
+	[SerializeField] private Material NightSkyMaterial;
 
 	private enum cloudiness {none, clear, mild, clouded};
 	private cloudiness m_Cloudiness;
@@ -31,7 +31,7 @@ public class WeatherManager : MonoBehaviour {
 	private float nightStart = 21f;
 	private float sunriseStart = 4.5f;
 	private float dayStart = 7f;
-	[SerializeField] private float sunsetStart;
+	private float sunsetStart = 17f;
 
 	//events one can tie to for scripting purposes
 	public event Action OnNightStart;
@@ -47,6 +47,11 @@ public class WeatherManager : MonoBehaviour {
 
 		initialSunIntensity = Sun.intensity;
 	
+	}
+
+	void Start()
+	{
+
 	}
 
 
@@ -99,6 +104,7 @@ public class WeatherManager : MonoBehaviour {
 				m_DayPhase = dayPhase.night;
 				Sun.DOIntensity (0, totalDayLength / 12);
 				NightSky.SetActive (true);
+
 				print ("night");
 			
 				if (OnNightStart != null)
