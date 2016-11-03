@@ -10,7 +10,7 @@ public class TODListener : MonoBehaviour {
 		WeatherManager.instance.OnNightStart += OnNightStart;
 		WeatherManager.instance.OnSunriseStart += OnSunriseStart;
 
-	
+		print ("subscribed");
 	}
 	
 	// Update is called once per frame

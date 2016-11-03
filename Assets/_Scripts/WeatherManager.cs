@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System;
+using DG.Tweening;
 
 public class WeatherManager : MonoBehaviour {
 	public static WeatherManager instance;
@@ -14,7 +15,7 @@ public class WeatherManager : MonoBehaviour {
 	[SerializeField] private Color sunriseSunColor;
 	[SerializeField] private Color daySunColor;
 	[SerializeField] private Color sunsetSunColor;
-	[SerializeField] private Color nightSunColor;
+
 
 	[SerializeField] private Light Sun;
 	private float initialSunIntensity;
@@ -27,10 +28,10 @@ public class WeatherManager : MonoBehaviour {
 	private dayPhase m_DayPhase;
 
 	//set values from the sun cycle
-	private float nightStart = 20f;
+	private float nightStart = 21f;
 	private float sunriseStart = 4.5f;
 	private float dayStart = 7f;
-	[SerializeField] private float sunsetStart = 18f;
+	[SerializeField] private float sunsetStart;
 
 	//events one can tie to for scripting purposes
 	public event Action OnNightStart;
@@ -54,7 +55,6 @@ public class WeatherManager : MonoBehaviour {
 	void Update () {
 		
 		if (gameTimeOfDay > 24f || gameTimeOfDay < 0f) {
-			print ("time out of 24h");
 			gameTimeOfDay = 0f;
 		}
 
@@ -78,6 +78,8 @@ public class WeatherManager : MonoBehaviour {
 		if (gameTimeOfDay > dayStart && gameTimeOfDay < sunsetStart && m_DayPhase != dayPhase.day) {
 			m_DayPhase = dayPhase.day;
 			print ("day");
+			StartCoroutine (changeSunColorTo (daySunColor));
+
 			if (OnDayStart != null)
 				OnDayStart ();
 		}
@@ -85,7 +87,9 @@ public class WeatherManager : MonoBehaviour {
 		if (gameTimeOfDay > sunsetStart && gameTimeOfDay < nightStart && m_DayPhase != dayPhase.sunset) {
 			m_DayPhase = dayPhase.sunset; 
 			print ("sunset");
-			NightSky.SetActive (true);
+
+			StartCoroutine (changeSunColorTo (sunsetSunColor));
+
 			if (OnSunsetStart != null)
 				OnSunsetStart ();
 		}
@@ -93,10 +97,10 @@ public class WeatherManager : MonoBehaviour {
 		if ((gameTimeOfDay > nightStart && gameTimeOfDay < 24) || (gameTimeOfDay > 0 && gameTimeOfDay < sunriseStart)) {
 			if (m_DayPhase != dayPhase.night) {
 				m_DayPhase = dayPhase.night;
-				Sun.intensity = 0;
-				if (!NightSky.activeSelf)
-					NightSky.SetActive (true);
+				Sun.DOIntensity (0, totalDayLength / 12);
+				NightSky.SetActive (true);
 				print ("night");
+			
 				if (OnNightStart != null)
 					OnNightStart ();
 			}
@@ -106,10 +110,24 @@ public class WeatherManager : MonoBehaviour {
 			m_DayPhase = dayPhase.sunrise;
 			print ("sunrise");
 			NightSky.SetActive (false);
-			Sun.intensity = initialSunIntensity;
+			Sun.DOIntensity (initialSunIntensity, totalDayLength / 12);
+			StartCoroutine (changeSunColorTo (sunriseSunColor));
+
 			if (OnSunriseStart != null)
 				OnSunriseStart();
 		}
 
+	}
+
+
+
+	private IEnumerator changeSunColorTo (Color newColor)
+	{
+		//do within 30 minutes of game 'time'
+		float transitionLength = (totalDayLength/12);
+		print ("changing color");
+		Sun.DOColor (newColor, transitionLength);
+
+		yield return null;
 	}
 }

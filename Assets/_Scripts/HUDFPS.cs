@@ -57,7 +57,7 @@ public class HUDFPS : MonoBehaviour
 				if(fps < 10)
 					guiText.material.color = Color.red;
 				else
-					guiText.material.color = Color.green;
+					guiText.material.color = Color.white;
 			//	DebugConsole.Log(format,level);
 			timeleft = updateInterval;
 			accum = 0.0F;
