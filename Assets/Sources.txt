@@ -1,4 +1,4 @@
-I didn't make these art assets. They were found at: 
+I didn't make all these assets. The following things were were from others: 
 
 Clouds
 http://gallery.yopriceville.com/Free-Clipart-Pictures/Cloud-PNG/Cloud_PNG_Transparent_Large_Clip_Art_Image#.WBkL38kzs4U
@@ -14,3 +14,9 @@ http://vaevictisgame.com/wp-content/uploads/2014/11/Road3.jpg
 
 HUDFPS script: 
 http://wiki.unity3d.com/index.php?title=FramesPerSecond
+
+DoTween
+http://dotween.demigiant.com/
+
+Unlit Shader Package: 
+https://www.assetstore.unity3d.com/en/#!/content/18282

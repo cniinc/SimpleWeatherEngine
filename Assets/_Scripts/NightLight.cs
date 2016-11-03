@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class NightLight : TODListener {
-
+	[SerializeField] private Light lightObject;
 
 	
 	// Update is called once per frame
@@ -12,6 +12,13 @@ public class NightLight : TODListener {
 
 	public override void OnSunsetStart()
 	{
-		print ("turning on light");
+		
+		lightObject.intensity = 5;
+	}
+
+	public override void OnSunriseStart()
+	{
+		
+		lightObject.intensity = 0;
 	}
 }
