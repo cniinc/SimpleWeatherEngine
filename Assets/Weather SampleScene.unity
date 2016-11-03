@@ -891,6 +891,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 804383425}
   - 108: {fileID: 804383426}
+  - 114: {fileID: 804383427}
   m_Layer: 0
   m_Name: Point light
   m_TagString: Untagged
@@ -945,6 +946,17 @@ Light:
   m_BounceIntensity: 0
   m_ShadowRadius: 0
   m_ShadowAngle: 0
+--- !u!114 &804383427
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 804383424}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a2527c3d4d96788429d91f11b69f9185, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &823210678
 GameObject:
   m_ObjectHideFlags: 0
@@ -1798,7 +1810,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameTimeOfDay: 0
-  totalDayLength: 10
+  totalDayLength: 20
   CelestialBodies: {fileID: 1410533706}
 --- !u!1 &1410533706
 GameObject:

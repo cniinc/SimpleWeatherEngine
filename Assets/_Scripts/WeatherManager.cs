@@ -3,6 +3,8 @@ using System.Collections;
 using System;
 
 public class WeatherManager : MonoBehaviour {
+	public static WeatherManager instance;
+
 	[Tooltip ("0 is midnight, 12 is noon, 6.5 is sunrise, or 6:30am")] 
 	[SerializeField] private float gameTimeOfDay;
 	[Tooltip("in seconds")]
@@ -23,14 +25,15 @@ public class WeatherManager : MonoBehaviour {
 	private float sunsetStart = 16f;
 
 	//events one can tie to for scripting purposes
-	public event Action<WeatherManager> OnNightStart;
-	public event Action<WeatherManager> OnSunriseStart;
-	public event Action<WeatherManager> OnDayStart;
-	public event Action<WeatherManager> OnSunsetStart;
+	public event Action OnNightStart;
+	public event Action OnSunriseStart;
+	public event Action OnDayStart;
+	public event Action OnSunsetStart;
 
 
 	// Use this for initialization
-	void Start () {
+	void Awake () {
+		instance = this;
 	
 	}
 
@@ -66,14 +69,14 @@ public class WeatherManager : MonoBehaviour {
 			m_DayPhase = dayPhase.day;
 			print ("day");
 			if (OnDayStart != null)
-				OnDayStart (this);
+				OnDayStart ();
 		}
 		//it is sunset
 		if (gameTimeOfDay > sunsetStart && gameTimeOfDay < nightStart && m_DayPhase != dayPhase.sunset) {
 			m_DayPhase = dayPhase.sunset; 
 			print ("sunset");
 			if (OnSunsetStart != null)
-				OnSunsetStart (this);
+				OnSunsetStart ();
 		}
 		//it is night
 		if ((gameTimeOfDay > nightStart && gameTimeOfDay < 24) || (gameTimeOfDay > 0 && gameTimeOfDay < sunriseStart)) {
@@ -81,7 +84,7 @@ public class WeatherManager : MonoBehaviour {
 				m_DayPhase = dayPhase.night;
 				print ("night");
 				if (OnNightStart != null)
-					OnNightStart (this);
+					OnNightStart ();
 			}
 		}
 		//it is sunrise
@@ -89,7 +92,7 @@ public class WeatherManager : MonoBehaviour {
 			m_DayPhase = dayPhase.sunrise;
 			print ("sunrise");
 			if (OnSunriseStart != null)
-				OnSunriseStart(this);
+				OnSunriseStart();
 		}
 
 	}
