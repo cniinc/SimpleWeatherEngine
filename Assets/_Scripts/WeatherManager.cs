@@ -83,11 +83,11 @@ public class WeatherManager : MonoBehaviour {
 
 	void initializeDayPhase() //should do a common parent function for both Initialize and Update day phase, but due to time just made two separate ones. In future, would refactor.
 	{
-		print ("is this thing on");
+		
 		//day
 		if (gameTimeOfDay > dayStart && gameTimeOfDay < sunsetStart) {
 			m_DayPhase = dayPhase.day;
-			print ("day");
+//			print ("day");
 
 			Sun.color = daySunColor;
 			if (OnDayStart != null)
@@ -97,7 +97,7 @@ public class WeatherManager : MonoBehaviour {
 		//sunset
 		if (gameTimeOfDay > sunsetStart && gameTimeOfDay < nightStart ) {
 			m_DayPhase = dayPhase.sunset; 
-			print ("sunset");
+//			print ("sunset");
 
 			Sun.color = sunsetSunColor;
 			NightSkyMaterial.color = new Color (1, 1, 1, 1);
@@ -111,7 +111,7 @@ public class WeatherManager : MonoBehaviour {
 				m_DayPhase = dayPhase.night;
 
 				Sun.intensity = 0;
-				print ("night1");
+//				print ("night1");
 				Color c = new Color (1, 1, 1, 1);
 				NightSkyMaterial.color = c;
 
@@ -122,7 +122,7 @@ public class WeatherManager : MonoBehaviour {
 		//sunrise
 		if (gameTimeOfDay > sunriseStart && gameTimeOfDay < dayStart) {
 			m_DayPhase = dayPhase.sunrise;
-			print ("sunrise");
+//			print ("sunrise");
 
 			NightSkyMaterial.color = new Color (1, 1, 1, 0);
 			//			NightSky.SetActive(false);
@@ -140,7 +140,7 @@ public class WeatherManager : MonoBehaviour {
 		//day
 		if (gameTimeOfDay > dayStart && gameTimeOfDay < sunsetStart && m_DayPhase != dayPhase.day) {
 			m_DayPhase = dayPhase.day;
-			print ("day");
+//			print ("day");
 
 			StartCoroutine (changeSunColorTo (daySunColor));
 
@@ -151,8 +151,7 @@ public class WeatherManager : MonoBehaviour {
 		if (gameTimeOfDay > sunsetStart && gameTimeOfDay < nightStart && m_DayPhase != dayPhase.sunset) {
 			m_DayPhase = dayPhase.sunset; 
 			print ("sunset");
-
-			NightSkyMaterial.DOColor (new Color (1, 1, 1, 1), m_transitionTime*2);
+			StartCoroutine (fadeInNightSky ((nightStart - sunsetStart)/3));
 			StartCoroutine (changeSunColorTo (sunsetSunColor));
 
 			if (OnSunsetStart != null)
@@ -164,7 +163,7 @@ public class WeatherManager : MonoBehaviour {
 				m_DayPhase = dayPhase.night;
 				Sun.DOIntensity (0, m_transitionTime);
 //				NightSky.SetActive (true);
-				print ("night");
+//				print ("night");
 			
 				if (OnNightStart != null)
 					OnNightStart ();
@@ -173,7 +172,7 @@ public class WeatherManager : MonoBehaviour {
 		//sunrise
 		if (gameTimeOfDay > sunriseStart && gameTimeOfDay < dayStart && m_DayPhase != dayPhase.sunrise) {
 			m_DayPhase = dayPhase.sunrise;
-			print ("sunrise");
+//			print ("sunrise");
 			NightSkyMaterial.DOColor (new Color (1, 1, 1, 0), m_transitionTime);
 //			NightSky.SetActive(false);
 			Sun.DOIntensity (initialSunIntensity, m_transitionTime);
@@ -186,11 +185,12 @@ public class WeatherManager : MonoBehaviour {
 	}
 
 	//shouldn't need, but just in case
-	private IEnumerator fadeOutNightSky()
+	private IEnumerator fadeInNightSky(float delayTime)
 	{
-		NightSkyMaterial.DOColor (new Color (1, 1, 1, 0), m_transitionTime);
-		yield return new WaitForSeconds (m_transitionTime);
-		NightSky.SetActive (false);
+		yield return new WaitForSeconds (delayTime);
+		print ("starting");
+		NightSkyMaterial.DOColor (new Color (1, 1, 1, 1), m_transitionTime* 4);
+
 	}
 
 
@@ -198,8 +198,8 @@ public class WeatherManager : MonoBehaviour {
 	private IEnumerator changeSunColorTo (Color newColor)
 	{
 		//do within 30 minutes of game 'time'
-		float transitionLength = (totalDayLength/12);
-		print ("changing color");
+		float transitionLength = (m_transitionTime);
+//		print ("changing color");
 		Sun.DOColor (newColor, transitionLength);
 
 		yield return null;
