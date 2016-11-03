@@ -25,8 +25,6 @@ public class WeatherManager : MonoBehaviour {
 	[SerializeField] private GameObject NightSky;
 	[SerializeField] private Material NightSkyMaterial;
 
-	private enum cloudiness {none, clear, mild, clouded};
-	private cloudiness m_Cloudiness;
 	private enum dayPhase {none, night, sunrise, day, sunset};
 	private dayPhase m_DayPhase;
 
@@ -42,7 +40,9 @@ public class WeatherManager : MonoBehaviour {
 	public event Action OnDayStart;
 	public event Action OnSunsetStart;
 
-
+	[SerializeField] private GameObject[] clouds;
+	[SerializeField] private float cloudsOnceEveryXDays;
+	[SerializeField] private float cloudsTravelForXHours;
 
 	// Use this for initialization
 	void Awake () {
@@ -57,6 +57,7 @@ public class WeatherManager : MonoBehaviour {
 	void Start()
 	{
 		initializeDayPhase ();
+		StartCoroutine (setCloudStorm ());
 	}
 
 
@@ -150,10 +151,10 @@ public class WeatherManager : MonoBehaviour {
 		//sunset
 		if (gameTimeOfDay > sunsetStart && gameTimeOfDay < nightStart && m_DayPhase != dayPhase.sunset) {
 			m_DayPhase = dayPhase.sunset; 
-			print ("sunset");
+//			print ("sunset");
 			StartCoroutine (fadeInNightSky ((nightStart - sunsetStart)/3));
 			StartCoroutine (changeSunColorTo (sunsetSunColor));
-
+			Sun.DOIntensity (0, m_transitionTime * 2);
 			if (OnSunsetStart != null)
 				OnSunsetStart ();
 		}
@@ -161,7 +162,7 @@ public class WeatherManager : MonoBehaviour {
 		if ((gameTimeOfDay > nightStart && gameTimeOfDay < 24) || (gameTimeOfDay > 0 && gameTimeOfDay < sunriseStart)) {
 			if (m_DayPhase != dayPhase.night) {
 				m_DayPhase = dayPhase.night;
-				Sun.DOIntensity (0, m_transitionTime);
+
 //				NightSky.SetActive (true);
 //				print ("night");
 			
@@ -188,7 +189,7 @@ public class WeatherManager : MonoBehaviour {
 	private IEnumerator fadeInNightSky(float delayTime)
 	{
 		yield return new WaitForSeconds (delayTime);
-		print ("starting");
+//		print ("starting");
 		NightSkyMaterial.DOColor (new Color (1, 1, 1, 1), m_transitionTime* 4);
 
 	}
@@ -203,5 +204,24 @@ public class WeatherManager : MonoBehaviour {
 		Sun.DOColor (newColor, transitionLength);
 
 		yield return null;
+	}
+
+	private IEnumerator setCloudStorm()
+	{
+//		print ("starting clouds");
+		Vector3 initialPos = clouds [0].transform.position;
+		float waitTime = UnityEngine.Random.Range(0f, cloudsOnceEveryXDays) * totalDayLength;
+		yield return new WaitForSeconds (waitTime);
+//		print ("moving clouds");
+		for(int i = 0; i < clouds.Length; i++){
+			Vector3 travelFinal = new Vector3 (initialPos.x, initialPos.y, initialPos.z+ 800);
+			clouds [i].transform.DOMove (travelFinal, totalDayLength*(cloudsTravelForXHours)/24 *(i+1)/clouds.Length );
+				}
+		yield return new WaitForSeconds(totalDayLength * cloudsTravelForXHours/24);
+//		print ("resetting clouds");
+		for(int i = 0; i < clouds.Length; i++){
+			clouds [i].transform.position = initialPos;
+		}
+		StartCoroutine (setCloudStorm ());
 	}
 }
