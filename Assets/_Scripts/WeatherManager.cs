@@ -27,10 +27,10 @@ public class WeatherManager : MonoBehaviour {
 	private dayPhase m_DayPhase;
 
 	//set values from the sun cycle
-	private float nightStart = 18f;
+	private float nightStart = 20f;
 	private float sunriseStart = 4.5f;
 	private float dayStart = 7f;
-	private float sunsetStart = 16f;
+	[SerializeField] private float sunsetStart = 18f;
 
 	//events one can tie to for scripting purposes
 	public event Action OnNightStart;
