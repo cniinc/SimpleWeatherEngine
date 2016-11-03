@@ -21,4 +21,15 @@ public class NightLight : TODListener {
 		
 		lightObject.intensity = 0;
 	}
+
+	public override void OnDayStart()
+	{
+
+		lightObject.intensity = 0;
+	}
+
+	public override void OnNightStart()
+	{
+		lightObject.intensity = 5;
+	}
 }

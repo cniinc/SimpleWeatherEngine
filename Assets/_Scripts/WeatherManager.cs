@@ -56,13 +56,16 @@ public class WeatherManager : MonoBehaviour {
 
 	void Start()
 	{
+		if (gameTimeOfDay > 24f || gameTimeOfDay < 0f) {
+			gameTimeOfDay = 0f;
+		}
+
+		sunRoundTime = gameTimeOfDay / 24 * totalDayLength;
 		initializeDayPhase ();
 		StartCoroutine (setCloudStorm ());
+
 	}
-
-
-
-	// Update is called once per frame
+		
 	void Update () {
 		
 		if (gameTimeOfDay > 24f || gameTimeOfDay < 0f) {
@@ -71,7 +74,6 @@ public class WeatherManager : MonoBehaviour {
 
 		gameTimeOfDay = sunRoundTime / totalDayLength * 24;
 
-//		CelestialBodies.transform.rotation = Quaternion.FromToRotation (Vector3.down, new Vector3 (0, CurrentTime / 24 * 360, 0));
 		Sun.gameObject.transform.rotation = Quaternion.Euler((sunRoundTime/totalDayLength*360 * -1) - 90, 0, 0);
 
 		if (sunRoundTime >= totalDayLength || sunRoundTime < 0f)
@@ -91,6 +93,7 @@ public class WeatherManager : MonoBehaviour {
 //			print ("day");
 
 			Sun.color = daySunColor;
+			NightSkyMaterial.color = new Color (1, 1, 1, 0);
 			if (OnDayStart != null)
 				OnDayStart ();
 		}
@@ -101,7 +104,7 @@ public class WeatherManager : MonoBehaviour {
 //			print ("sunset");
 
 			Sun.color = sunsetSunColor;
-			NightSkyMaterial.color = new Color (1, 1, 1, 1);
+
 
 			if (OnSunsetStart != null)
 				OnSunsetStart ();
@@ -112,7 +115,7 @@ public class WeatherManager : MonoBehaviour {
 				m_DayPhase = dayPhase.night;
 
 				Sun.intensity = 0;
-//				print ("night1");
+//				print ("night");
 				Color c = new Color (1, 1, 1, 1);
 				NightSkyMaterial.color = c;
 
@@ -126,7 +129,7 @@ public class WeatherManager : MonoBehaviour {
 //			print ("sunrise");
 
 			NightSkyMaterial.color = new Color (1, 1, 1, 0);
-			//			NightSky.SetActive(false);
+
 			Sun.intensity = initialSunIntensity;
 			Sun.color = sunriseSunColor;
 
@@ -163,7 +166,6 @@ public class WeatherManager : MonoBehaviour {
 			if (m_DayPhase != dayPhase.night) {
 				m_DayPhase = dayPhase.night;
 
-//				NightSky.SetActive (true);
 //				print ("night");
 			
 				if (OnNightStart != null)
@@ -175,7 +177,6 @@ public class WeatherManager : MonoBehaviour {
 			m_DayPhase = dayPhase.sunrise;
 //			print ("sunrise");
 			NightSkyMaterial.DOColor (new Color (1, 1, 1, 0), m_transitionTime);
-//			NightSky.SetActive(false);
 			Sun.DOIntensity (initialSunIntensity, m_transitionTime);
 			StartCoroutine (changeSunColorTo (sunriseSunColor));
 
@@ -198,7 +199,7 @@ public class WeatherManager : MonoBehaviour {
 
 	private IEnumerator changeSunColorTo (Color newColor)
 	{
-		//do within 30 minutes of game 'time'
+		
 		float transitionLength = (m_transitionTime);
 //		print ("changing color");
 		Sun.DOColor (newColor, transitionLength);
