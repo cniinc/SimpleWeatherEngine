@@ -505,6 +505,10 @@ Prefab:
       propertyPath: m_CastShadows
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 141212, guid: 2dac79c3033f143939eff9b5d57610bb, type: 2}
+      propertyPath: m_Name
+      value: NightSky
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 9518986, guid: 2dac79c3033f143939eff9b5d57610bb, type: 2}
   m_ParentPrefab: {fileID: 100100000, guid: 2dac79c3033f143939eff9b5d57610bb, type: 2}
@@ -1774,7 +1778,7 @@ MonoBehaviour:
   sunsetSunColor: {r: 1, g: 0.5661901, b: 0, a: 1}
   Sun: {fileID: 1410533707}
   NightSky: {fileID: 611173092}
-  sunsetStart: 17
+  NightSkyMaterial: {fileID: 2100000, guid: bc2e2ff4e963c0f468f211da4c6b2d2d, type: 2}
 --- !u!1 &1395079273
 GameObject:
   m_ObjectHideFlags: 0

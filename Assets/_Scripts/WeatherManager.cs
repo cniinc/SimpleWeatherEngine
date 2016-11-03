@@ -6,11 +6,14 @@ using DG.Tweening;
 public class WeatherManager : MonoBehaviour {
 	public static WeatherManager instance;
 
-	[Tooltip ("0 is midnight, 12 is noon, 6.5 is sunrise, or 6:30am")] 
+	[Tooltip ("0 is midnight, 12 is noon, 6.5 is 6:30am")] 
 	[SerializeField] private float gameTimeOfDay;
 	[Tooltip("in seconds")]
 	[SerializeField] private float totalDayLength; 
 	private float sunRoundTime = 0;
+	[Tooltip("In in-game time")]
+	[SerializeField] private float transitionHours = 2; //the 'game-time' hours
+	private float m_transitionTime; //the actual calculated time based on totalDayLength
 
 	[SerializeField] private Color sunriseSunColor;
 	[SerializeField] private Color daySunColor;
@@ -40,18 +43,20 @@ public class WeatherManager : MonoBehaviour {
 	public event Action OnSunsetStart;
 
 
+
 	// Use this for initialization
 	void Awake () {
 		instance = this;
 
 
 		initialSunIntensity = Sun.intensity;
-	
+
+		m_transitionTime = totalDayLength / 24 * transitionHours;
 	}
 
 	void Start()
 	{
-
+		
 	}
 
 
@@ -92,7 +97,7 @@ public class WeatherManager : MonoBehaviour {
 		if (gameTimeOfDay > sunsetStart && gameTimeOfDay < nightStart && m_DayPhase != dayPhase.sunset) {
 			m_DayPhase = dayPhase.sunset; 
 			print ("sunset");
-
+			NightSkyMaterial.DOColor (new Color (1, 1, 1, 1), m_transitionTime);
 			StartCoroutine (changeSunColorTo (sunsetSunColor));
 
 			if (OnSunsetStart != null)
@@ -102,8 +107,8 @@ public class WeatherManager : MonoBehaviour {
 		if ((gameTimeOfDay > nightStart && gameTimeOfDay < 24) || (gameTimeOfDay > 0 && gameTimeOfDay < sunriseStart)) {
 			if (m_DayPhase != dayPhase.night) {
 				m_DayPhase = dayPhase.night;
-				Sun.DOIntensity (0, totalDayLength / 12);
-				NightSky.SetActive (true);
+				Sun.DOIntensity (0, m_transitionTime);
+//				NightSky.SetActive (true);
 
 				print ("night");
 			
@@ -115,14 +120,23 @@ public class WeatherManager : MonoBehaviour {
 		if (gameTimeOfDay > sunriseStart && gameTimeOfDay < dayStart && m_DayPhase != dayPhase.sunrise) {
 			m_DayPhase = dayPhase.sunrise;
 			print ("sunrise");
-			NightSky.SetActive (false);
-			Sun.DOIntensity (initialSunIntensity, totalDayLength / 12);
+			NightSkyMaterial.DOColor (new Color (1, 1, 1, 0), m_transitionTime);
+//			NightSky.SetActive(false);
+			Sun.DOIntensity (initialSunIntensity, m_transitionTime);
 			StartCoroutine (changeSunColorTo (sunriseSunColor));
 
 			if (OnSunriseStart != null)
 				OnSunriseStart();
 		}
 
+	}
+
+	//shouldn't need, but just in case
+	private IEnumerator fadeOutNightSky()
+	{
+		NightSkyMaterial.DOColor (new Color (1, 1, 1, 0), m_transitionTime);
+		yield return new WaitForSeconds (m_transitionTime);
+		NightSky.SetActive (false);
 	}
 
 
