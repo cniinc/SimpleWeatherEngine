@@ -11,7 +11,15 @@ public class WeatherManager : MonoBehaviour {
 	[SerializeField] private float totalDayLength; 
 	private float sunRoundTime = 0;
 
-	[SerializeField] private GameObject CelestialBodies;
+	[SerializeField] private Color sunriseSunColor;
+	[SerializeField] private Color daySunColor;
+	[SerializeField] private Color sunsetSunColor;
+	[SerializeField] private Color nightSunColor;
+
+	[SerializeField] private Light Sun;
+	private float initialSunIntensity;
+	[SerializeField] private GameObject NightSky;
+
 
 	private enum cloudiness {none, clear, mild, clouded};
 	private cloudiness m_Cloudiness;
@@ -34,6 +42,9 @@ public class WeatherManager : MonoBehaviour {
 	// Use this for initialization
 	void Awake () {
 		instance = this;
+
+
+		initialSunIntensity = Sun.intensity;
 	
 	}
 
@@ -50,13 +61,12 @@ public class WeatherManager : MonoBehaviour {
 		gameTimeOfDay = sunRoundTime / totalDayLength * 24;
 
 //		CelestialBodies.transform.rotation = Quaternion.FromToRotation (Vector3.down, new Vector3 (0, CurrentTime / 24 * 360, 0));
-		CelestialBodies.transform.rotation = Quaternion.Euler((sunRoundTime/totalDayLength*360 * -1) - 90, 0, 0);
+		Sun.gameObject.transform.rotation = Quaternion.Euler((sunRoundTime/totalDayLength*360 * -1) - 90, 0, 0);
 
 		if (sunRoundTime >= totalDayLength || sunRoundTime < 0f)
 			sunRoundTime = 0f;
 		else sunRoundTime += (Time.deltaTime);
 
-//		print (gameTimeOfDay);
 		updateDayPhase ();
 	
 	}
@@ -64,33 +74,39 @@ public class WeatherManager : MonoBehaviour {
 	void updateDayPhase()
 	{
 		
-		//it is day
+		//day
 		if (gameTimeOfDay > dayStart && gameTimeOfDay < sunsetStart && m_DayPhase != dayPhase.day) {
 			m_DayPhase = dayPhase.day;
 			print ("day");
 			if (OnDayStart != null)
 				OnDayStart ();
 		}
-		//it is sunset
+		//sunset
 		if (gameTimeOfDay > sunsetStart && gameTimeOfDay < nightStart && m_DayPhase != dayPhase.sunset) {
 			m_DayPhase = dayPhase.sunset; 
 			print ("sunset");
+			NightSky.SetActive (true);
 			if (OnSunsetStart != null)
 				OnSunsetStart ();
 		}
-		//it is night
+		//night
 		if ((gameTimeOfDay > nightStart && gameTimeOfDay < 24) || (gameTimeOfDay > 0 && gameTimeOfDay < sunriseStart)) {
 			if (m_DayPhase != dayPhase.night) {
 				m_DayPhase = dayPhase.night;
+				Sun.intensity = 0;
+				if (!NightSky.activeSelf)
+					NightSky.SetActive (true);
 				print ("night");
 				if (OnNightStart != null)
 					OnNightStart ();
 			}
 		}
-		//it is sunrise
+		//sunrise
 		if (gameTimeOfDay > sunriseStart && gameTimeOfDay < dayStart && m_DayPhase != dayPhase.sunrise) {
 			m_DayPhase = dayPhase.sunrise;
 			print ("sunrise");
+			NightSky.SetActive (false);
+			Sun.intensity = initialSunIntensity;
 			if (OnSunriseStart != null)
 				OnSunriseStart();
 		}

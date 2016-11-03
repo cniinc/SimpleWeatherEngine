@@ -302,7 +302,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 155142653}
   m_Layer: 0
-  m_Name: HalfSphereWithUV
+  m_Name: Stars HalfSphere
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1228,7 +1228,7 @@ GameObject:
   - 4: {fileID: 900102165}
   - 212: {fileID: 900102166}
   m_Layer: 0
-  m_Name: moon_png_by_natyjonasproductions-d4kod97
+  m_Name: Moon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1811,7 +1811,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameTimeOfDay: 0
   totalDayLength: 20
-  CelestialBodies: {fileID: 1410533706}
+  sunriseSunColor: {r: 0, g: 0, b: 0, a: 0}
+  daySunColor: {r: 0, g: 0, b: 0, a: 0}
+  sunsetSunColor: {r: 0, g: 0, b: 0, a: 0}
+  nightSunColor: {r: 0, g: 0, b: 0, a: 0}
+  Sun: {fileID: 1410533707}
+  NightSky: {fileID: 155142652}
 --- !u!1 &1410533706
 GameObject:
   m_ObjectHideFlags: 0
@@ -1822,7 +1827,7 @@ GameObject:
   - 4: {fileID: 1410533708}
   - 108: {fileID: 1410533707}
   m_Layer: 0
-  m_Name: Directional Light
+  m_Name: Sun
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2195,7 +2200,7 @@ GameObject:
   - 114: {fileID: 1619554947}
   - 114: {fileID: 1619554946}
   m_Layer: 5
-  m_Name: Canvas
+  m_Name: DebugCanvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2246,7 +2251,7 @@ Canvas:
   m_GameObject: {fileID: 1619554945}
   m_Enabled: 1
   serializedVersion: 2
-  m_RenderMode: 0
+  m_RenderMode: 1
   m_Camera: {fileID: 1643552900}
   m_PlaneDistance: 100
   m_PixelPerfect: 0
